@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- "spring-servlet" is name given to Configuration file and this is given according to particular default "Spring MVC" convention. If we want to
+ give any name according to our wish, then we need to do more configuration. "spring" is the name of "Servlet" given inside
+ "servlet-name" tag in "web.xml" file and it must be same. "-servlet" is attached to name "spring" according to default convention. -->
+<!-- This file reads the "web.xml" file according to its name convention "spring-servlet" automatically. -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- For enabling a "@Transactional" annotation. -->
+    <tx:annotation-driven />
+
+    <!-- For enabling all "Annotations" in whole project. -->
+    <context:component-scan base-package="org.springmvc" />
+
+    <mvc:annotation-driven />
+
+    <mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />
+
+    <!-- "View Resolver" class. -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" name="viewResolver">
+        <property name="prefix" value="/WEB-INF/views/" /> <!-- Value is the path at which the "Page" or "View" is placed.
+        It means how page will be started. Page will be inside the "WEB-INF", in "views" folder and we don't need to give
+        the Page name, it will be given by "Controller" dynamically. -->
+        <property name="suffix" value=".jsp" /> <!-- It means how page will be ended. Page will be ended with ".jsp". -->
+        <!-- For example, "/WEB-INF/views/start.jsp" -->
+    </bean>
+
+    <!-- "Hibernate ORM" configuration. -->
+
+    <!-- "Data Source" class. -->
+    <bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" name="dataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://Localhost:3306/SpringHibernateProjects"/>
+        <property name="username" value="root" />
+        <property name="password" value="MySql-root-11" />
+    </bean>
+
+    <!-- "". -->
+    <bean class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" name="localSessionFactory">
+        
+        <!-- Data Source. -->
+        <property name="dataSource" ref="dataSource" />
+        
+        <!-- Hibernate Properties. -->
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+
+        <!-- Annotated Classes. -->
+        <property name="annotatedClasses">
+            <list>
+                <value>org.springmvc.model.Product</value>
+                <value>org.springmvc.model.LogIn</value>
+                <value>org.springmvc.model.Customer</value>
+                <value>org.springmvc.model.Address</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- "Hibernate Template" class. -->
+    <bean class="org.springframework.orm.hibernate5.HibernateTemplate" name="hibernateTemplate">
+        <property name="sessionFactory" ref="localSessionFactory" />
+    </bean>
+
+    <!-- "Transaction Manager" class. -->
+    <bean class="org.springframework.orm.hibernate5.HibernateTransactionManager" name="transactionManager">
+        <property name="sessionFactory" ref="localSessionFactory" />
+    </bean>
+
+    <!-- "Interceptor" configuration. -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/handleLogInForm"/>
+
+            <bean class="org.springmvc.entities.MyInterceptor">
+
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>

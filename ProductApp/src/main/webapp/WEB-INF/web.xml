@@ -1,0 +1,21 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+
+  <!--  Configure "Dispatcher Servlet" and "Dispatcher Servlet" is the "Front Controller" that accepts the Request from
+   "Client" and delegates that request to "Controller" which handles the request and give Response to Front Controller. -->
+  <!-- This is the "Servlet" declaration. -->
+  <servlet>
+    <servlet-name>spring</servlet-name> <!-- Name of "Servlet" can be any name. But this name must be same as "Configuration" file. -->
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>spring</servlet-name> <!-- Name will be same as given above in "<servlet-name>" inside the "<servlet>" tag. -->
+    <url-pattern>/</url-pattern> <!-- "/" for all handling all type of "URL's" or "Requests" and not only a particular type
+    of URl or Request. "/spring" is used to handle only URL that start with "spring".  -->
+  </servlet-mapping>
+</web-app>
